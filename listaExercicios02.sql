@@ -113,3 +113,36 @@ DELIMITER ;
 CALL sp_LivrosAteAno(1999);
 
 --no caso eu coloquei o 1999 só de exemplo
+
+-- --------------------------------------------------------------------------------------------
+-- EX 6:
+
+DELIMITER //
+
+CREATE PROCEDURE sp_TitulosPorCategoria(IN categoria_nome VARCHAR(200))
+BEGIN
+
+    DECLARE livro_titulo VARCHAR(255);
+
+    DECLARE cursor_livros CURSOR FOR
+        SELECT Titulo
+        FROM Livro
+        INNER JOIN Categoria ON Livro.Categoria_ID = Categoria.Categoria_ID
+        WHERE Categoria.Nome = categoria_nome;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET livro_titulo = NULL;
+    
+    OPEN cursor_livros;
+    read_loop: LOOP
+        FETCH cursor_livros INTO livro_titulo;
+        IF livro_titulo IS NULL THEN
+            LEAVE read_loop;
+        END IF;
+        SELECT livro_titulo;
+    END LOOP;
+    CLOSE cursor_livros;
+END;
+//
+
+DELIMITER ;
+
+CALL sp_TitulosPorCategoria('Romance');
