@@ -225,4 +225,29 @@ DELIMITER ;
 CALL sp_AutorMaisAntigo(@nome_autor_mais_antigo);
 SELECT @nome_autor_mais_antigo AS 'Nome do Autor Mais Antigo';
 
+-- ---------------------------------------------------------------------------------------------------------------------------------------
 
+
+
+-- EX 9:
+
+-- Delimiter delimita o começo e final de cada sp, no caso as duas barras são o símbolo que delimita isso
+DELIMITER //
+
+-- Create procedure cria a sp, seguido do nome da sp e os parâmetros, nesse caso, como é basicamente um select, não precisa de parâmetro
+CREATE PROCEDURE sp_ListarAutores()
+-- O begin inicia a série de instruções da sp, que é o que a sp vai fazer e tals
+BEGIN
+    -- esse select é para pegar o nome e sobrenome dos autores 
+    SELECT Nome, Sobrenome
+    FROM Autor;
+    
+-- o end termina o bloco de instruções
+END;
+//
+
+DELIMITER ;
+-- aí tem o final da sp, com o delimiter final
+
+CALL sp_ListarAutores();
+-- e aqui tem a call que "chama a sp", nesse caso invoca ela e faz ela fazer o select
